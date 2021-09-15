@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.gamsungjin.post.dao.PostDAO">
+ 	<!-- 전체글목록 -->
+ 	<select id="selectPostList" resultType="com.gamsungjin.post.model.Post">
+ 		SELECT
+ 			`id`
+ 			, `userId`
+ 			, `boardId`
+ 			, `nickname`
+ 			, `subject`
+ 			, `content`
+ 			, `imagePath`
+ 			, `createdAt`
+ 			, `updatedAt`
+ 		FROM
+ 			`post`
+ 	</select>
+ 	
+ 	<!-- 선택된 게시판 글목록 -->
+ 	<select id="selectPostBoardList" parameterType="int" resultType="com.gamsungjin.post.model.Post">
+ 		SELECT
+ 			`id`
+ 			, `userId`
+ 			, `boardId`
+ 			, `nickname`
+ 			, `subject`
+ 			, `content`
+ 			, `imagePath`
+ 			, `createdAt`
+ 			, `updatedAt`
+ 		FROM
+ 			`post`
+ 		WHERE
+ 			`boardId` = #{boardId}
+ 	</select>
+ 	
+ 	<select id="selectPostById" parameterType="int" resultType="com.gamsungjin.post.model.Post">
+		SELECT
+ 			`post`.`id`
+ 			, `post`.`userId`
+ 			, `post`.`boardId`
+ 			, `post`.`nickname`
+ 			, `post`.`subject`
+ 			, `post`.`content`
+ 			, `post`.`imagePath`
+ 			, `post`.`createdAt`
+ 			, `post`.`updatedAt`
+ 			, `board`.`name` AS `boardName`
+ 		FROM
+ 			`post`
+ 		JOIN
+ 			`board`
+ 		ON
+ 			`post`.`boardId` = `board`.`id`
+ 		WHERE
+ 			`post`.`id` = #{id}
+ 	</select>
+ 	
+ 	<select id="getPostCountByUserId" parameterType="int" resultType="int">
+ 		SELECT
+ 			count(*)
+ 		FROM
+ 			`post`
+ 		WHERE
+ 			`userId` = #{userId}
+ 	</select>
+ 	
+ 	<insert id="insertPost" parameterType="map">
+ 		INSERT INTO `post`
+		(
+			`userId`
+			, `boardId`
+			, `nickname`
+			, `subject`
+			, `content`
+			, `imagePath`
+			, `createdAt`
+			, `updatedAt`
+		)
+		VALUES
+		(
+			#{userId}
+			, #{boardId}
+			, #{nickname}
+			, #{subject}
+			, #{content}
+			, #{imagePath}
+			, NOW()
+			, NOW()
+		)
+ 	</insert>
+ </mapper>
