@@ -34,8 +34,16 @@
 				return;
 			}
 			
-			// 파일이 업로드 됐을때만 확장자 체크
+			// 사진게시판만 파일 업로드 가능
+			let boardId = $('select[name=board]').val();
 			let file = $('input[name=file]').val();
+			if (boardId != 7 && file != "") {
+				alert("사진게시판만 파일을 업로드할 수 있습니다.");
+				$('input[name=file]').val("");
+				return;
+			}
+			
+			// 파일이 업로드 됐을때만 확장자 체크
 			if (file != "") {
 				let ext = file.split('.').pop().toLowerCase();
 				if ($.inArray(ext, ['jpg', 'jpeg', 'png', 'gif']) == -1) {
@@ -47,9 +55,9 @@
 			
 			// 폼 생성 -> 서버에 보내기
 			let formData = new FormData();
-			formData.append('boardId', $('select[name=board]').val());
+			formData.append('boardId', boardId);
 			formData.append('subject', subject);
-			formData.append('content', $('input[name=content]').val());
+			formData.append('content', $('textarea[name=content]').val());
 			formData.append('file', $('input[name=file]')[0].files[0]);
 			
 			$.ajax({
@@ -65,7 +73,7 @@
 				, success: function(data) {
 					if (data.result == "success") {
 						alert("글쓰기 성공.");
-						location.href = '/main/main_view';
+						location.href = '/main/main_view?boardId='+ boardId;
 					} else {
 						alert("글쓰기 실패. 다시 확인해주세요.")
 					}

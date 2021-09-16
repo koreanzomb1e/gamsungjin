@@ -43,4 +43,20 @@ public class FileManagerService {
 		return "/images/" + directoryName + file.getOriginalFilename();
 	}
 	
+	// 이미지 파일 삭제
+	public void deleteFile(String imagePath) throws IOException {
+		// C:\Users\ganjinam\Desktop\class\7_project\workspace\gamsungjin\images/
+		Path path = Paths.get(FILE_UPLOAD_PATH + imagePath.replace("/images/", ""));
+		
+		// 이미지 삭제
+		if (Files.exists(path)) {
+			Files.delete(path);
+		}
+		
+		// 디렉토리 삭제
+		path = path.getParent();
+		if (Files.exists(path)) {
+			Files.delete(path);
+		}
+	}
 }

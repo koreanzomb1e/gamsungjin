@@ -92,4 +92,12 @@
 			, NOW()
 		)
  	</insert>
+ 	
+ 	<delete id="deletePostById" parameterType="int">
+ 		DELETE
+ 		FROM
+ 			`post`
+ 		WHERE
+ 			`id` = #{id}
+ 	</delete>
  </mapper>

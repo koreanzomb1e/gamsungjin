@@ -10,11 +10,11 @@ import com.gamsungjin.post.model.Post;
 @Repository
 public interface PostDAO {
 	
+	public Post selectPostById(int id);
+	
 	public List<Post> selectPostList();
 	
 	public List<Post> selectPostBoardList(int boardId);
-	
-	public Post selectPostById(int id);
 	
 	public int getPostCountByUserId(int userId);
 	
@@ -25,4 +25,6 @@ public interface PostDAO {
 			, @Param("subject") String subject
 			, @Param("content") String content
 			, @Param("imagePath") String imagePath);
+	
+	public int deletePostById(int id);
 }

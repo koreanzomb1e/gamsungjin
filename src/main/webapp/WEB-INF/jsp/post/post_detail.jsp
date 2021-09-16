@@ -15,6 +15,13 @@
 	</div>
 	<hr>
 	
+	<!-- 이미지 -->
+	<c:if test="${not empty post.imagePath}">
+		<div class="mb-2">
+			<img src="${post.imagePath}" alt="이미지" width="200px">
+		</div>
+	</c:if>
+	
 	<!-- 글내용 -->
 	<div>
 		${post.content}
@@ -23,10 +30,12 @@
 	
 	<!-- 삭제, 수정 버튼 -->
 	<!-- 로그인 유저와 글 작성자가 같을 때 -->
-	<c:if test="${userId eq post.id}">
+	<c:if test="${userId eq post.userId}">
 		<div class="d-flex justify-content-end">
-			<button type="button" class="btn btn-primary mr-2">삭제</button>
-			<button type="button" class="btn btn-secondary">수정</button>
+			<button type="button" id="postDelBtn" class="btn btn-primary mr-2"
+				data-board-id="${post.boardId}" data-post-id="${post.id}">삭제</button>
+			<button type="button" id="postUpBtn" class="btn btn-secondary"
+				data-post-id="${post.id}">수정</button>
 		</div>
 	</c:if>
 	
@@ -45,8 +54,44 @@
 		<div class="input-group mt-2">
 			<input type="text" class="form-control" name="content" placeholder="댓글을 입력해주세요.">
 			<div class="input-group-append">
-				<button type="button" class="btn btn-secondary btn-sm">등록</button>
+				<button type="button" id="commentUpBtn" class="btn btn-secondary btn-sm">등록</button>
 			</div>
 		</div>
 	</c:if>
 </div>
+
+<script>
+	$(document).ready(function() {	
+		// 글 삭제 버튼
+		$('#postDelBtn').on('click', function() {
+			let boardId = $(this).data('board-id');
+			let postId = $(this).data('post-id');
+			
+			$.ajax({
+				url: '/post/delete'
+				, type: 'delete'
+				, data: {'postId':postId}
+				, success: function(data) {
+					if (data.result == "success") {
+						alert("글삭제 성공.");
+						location.href = '/main/main_view?boardId='+ boardId;
+					} else {
+						alert("글삭제 실패. 다시 확인해주세요.");
+					}
+				}, error: function(e) {
+					alert("오류가 발생했습니다. 관리자에게 문의해주세요" + e)
+				}
+			});
+		});
+		
+		
+		// 
+		$('#commentUpBtn').on('click', function() {
+			let content = $('input[name=content]').val();
+			if (content == "") {
+				alert("댓글을 입력해주세요.");
+				return;
+			}
+		});
+	});
+</script>

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.gamsungjin.comment.bo.CommentBO;
 import com.gamsungjin.common.FileManagerService;
 import com.gamsungjin.post.dao.PostDAO;
 import com.gamsungjin.post.model.Post;
@@ -20,6 +21,9 @@ public class PostBO {
 	
 	@Autowired
 	private PostDAO postDAO;
+	
+	@Autowired
+	private CommentBO commentBO;
 	
 	@Autowired
 	private FileManagerService fileManagerService;
@@ -47,10 +51,27 @@ public class PostBO {
 			try {
 				imagePath = fileManagerService.saveFile(userId, file);
 			} catch (IOException e) {
-				logger.error("[파일업로드] " + e.getMessage());
+				logger.error("[파일업로드] 업로드 에러" + e.getMessage());
 			}
 		}
 		
 		return postDAO.insertPost(userId, boardId, userNickname, subject, content, imagePath);
+	}
+	
+	public int deletePostById(int id) {
+		Post post = postDAO.selectPostById(id);
+		String imagePath = post.getImagePath();
+		
+		if (imagePath != null) {
+			try {
+				fileManagerService.deleteFile(imagePath);
+			} catch (IOException e) {
+				logger.error("[파일삭제] 삭제 에러" + e.getMessage());
+			}
+		}
+		
+		commentBO.deleteCommentByPostId(id);
+		
+		return postDAO.deletePostById(id);
 	}
 }

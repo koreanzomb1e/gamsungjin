@@ -43,7 +43,3 @@
 		</c:forEach>
 	</div>
 </div>
-
-<script>
-	$
-</script>

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,7 +48,7 @@ public class PostRestController {
 		Integer userId = (Integer) session.getAttribute("userId");
 		String userNickname = (String) session.getAttribute("userNickname");
 		
-		/*로그인 확인*/
+		// 로그인 확인
 		Map<String, String> result = new HashMap<>();
 		if (userId == null) {
 			result.put("result", "fail");
@@ -57,6 +58,22 @@ public class PostRestController {
 		
 		int row = postBO.createPost(userId, boardId, userNickname, subject, content, file);
 		
+		if (row > 0) {
+			result.put("result", "success");
+		} else {
+			result.put("result", "fail");
+		}
+		
+		return result;
+	}
+	
+	@DeleteMapping("/delete")
+	public Map<String, String> postDelete(
+			@RequestParam("postId") int postId) {
+		
+		int row = postBO.deletePostById(postId);
+		
+		Map<String, String> result = new HashMap<>();
 		if (row > 0) {
 			result.put("result", "success");
 		} else {
