@@ -10,15 +10,39 @@ public class Content {
 	private List<Board> boardList;
 	// 전체글목록
 	private List<Post> postList;
+	// 공지사항 글목록
+	private List<Post> postNoticeList;
+	// 사진게시판 글목록
+	private List<Post> postImageList;
 	// 선택된 게시판 글목록
 	private List<Post> postBoardList;
 	// 선택된 게시판
 	private Board board;
-	// 포스트 카운트
+	// 글수
 	private int postCount;
-	// 댓글 카운트
+	// 댓글수
 	private int commentCount;
+	// 방문수
+	private int visitCount;
 	
+	public List<Post> getPostNoticeList() {
+		return postNoticeList;
+	}
+	public void setPostNoticeList(List<Post> postNoticeList) {
+		this.postNoticeList = postNoticeList;
+	}
+	public List<Post> getPostImageList() {
+		return postImageList;
+	}
+	public void setPostImageList(List<Post> postImageList) {
+		this.postImageList = postImageList;
+	}
+	public int getVisitCount() {
+		return visitCount;
+	}
+	public void setVisitCount(int visitCount) {
+		this.visitCount = visitCount;
+	}
 	public int getPostCount() {
 		return postCount;
 	}

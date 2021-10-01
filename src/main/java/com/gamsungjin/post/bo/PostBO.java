@@ -36,6 +36,16 @@ public class PostBO {
 		return postDAO.selectPostBoardList(boardId);
 	}
 	
+	// 공지사항 글 가져오기
+	public List<Post> getPostNoticeList() {
+		return postDAO.selectPostNoticeList();
+	}
+	
+	// 사진게시판 글 가져오기
+	public List<Post> getPostImageList() {
+		return postDAO.selectPostImageList();
+	}
+	
 	public Post getPostById(int id) {
 		return postDAO.selectPostById(id);
 	}
@@ -73,5 +83,46 @@ public class PostBO {
 		commentBO.deleteCommentByPostId(id);
 		
 		return postDAO.deletePostById(id);
+	}
+	
+	public int updatePostById(int postId, int userId, int boardId, String subject, String content, MultipartFile file) {
+		// 새로운 파일 이미지 url 생성
+		String newImagePath = null;
+		if (file != null) {
+			// 새로운 파일이 있을 경우
+			// db 입력
+			try {
+				newImagePath = fileManagerService.saveFile(userId, file);
+			} catch (IOException e) {
+				logger.error("[파일업로드] 업로드 에러" + e.getMessage());
+			}
+		
+			// 기존 파일 삭제
+			Post post = postDAO.selectPostById(postId);
+			String oldImagePath = post.getImagePath();
+			
+			if (oldImagePath != null) {
+				try {
+					fileManagerService.deleteFile(oldImagePath);
+				} catch (IOException e) {
+					logger.error("[파일삭제] 삭제 에러" + e.getMessage());
+				}
+			}
+		} else {
+			// 새로운 파일이 없을 경우
+			Post post = postDAO.selectPostById(postId);
+			String oldImagePath = post.getImagePath();
+			
+			if (oldImagePath != null) {
+				newImagePath = oldImagePath;
+			}
+		}
+		
+		return postDAO.updatePostById(postId, boardId, subject, content, newImagePath);
+	}
+	
+	// 조회수 업데이트
+	public void updateVisitById(int id) {
+		postDAO.updateVisitById(id);
 	}
 }

@@ -16,6 +16,10 @@ public interface PostDAO {
 	
 	public List<Post> selectPostBoardList(int boardId);
 	
+	public List<Post> selectPostNoticeList();
+	
+	public List<Post> selectPostImageList();
+	
 	public int getPostCountByUserId(int userId);
 	
 	public int insertPost(
@@ -27,4 +31,13 @@ public interface PostDAO {
 			, @Param("imagePath") String imagePath);
 	
 	public int deletePostById(int id);
+	
+	public int updatePostById(
+			@Param("postId") int postId
+			, @Param("boardId") int boardId
+			, @Param("subject") String subject
+			, @Param("content") String content
+			, @Param("imagePath") String imagePath);
+	
+	public void updateVisitById(int id);
 }

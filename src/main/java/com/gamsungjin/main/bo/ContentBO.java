@@ -11,6 +11,7 @@ import com.gamsungjin.comment.bo.CommentBO;
 import com.gamsungjin.main.domain.Content;
 import com.gamsungjin.post.bo.PostBO;
 import com.gamsungjin.post.model.Post;
+import com.gamsungjin.visit.bo.VisitBO;
 
 @Service
 public class ContentBO {
@@ -24,63 +25,72 @@ public class ContentBO {
 	@Autowired
 	private CommentBO commentBO;
 	
-	/*메인화면*/
+	@Autowired
+	private VisitBO visitBO;
+	
+	// 메인화면
 	public Content getContent() {
 		Content content = new Content();
 		
-		/*전체글목록*/
+		// 전체글목록
+		// 내림차순(최신순) 10개 제한
 		List<Post> postList = postBO.getPostList();
 		content.setPostList(postList);
 		
-		/*공지사항*/
-		List<Post> postNoticeList = postBO.getPostBoardList(1);
-		content.setPostBoardList(postNoticeList);
+		// 공지사항
+		// 내림차순(최신순) 5개 제한
+		List<Post> postNoticeList = postBO.getPostNoticeList();
+		content.setPostNoticeList(postNoticeList);
 		
-		/*사진게시판*/
-		List<Post> postImageList = postBO.getPostBoardList(7);
-		content.setPostBoardList(postImageList);
+		// 사진게시판
+		// 내림차순(최신순) 6개 제한
+		List<Post> postImageList = postBO.getPostImageList();
+		content.setPostImageList(postImageList);
 		
 		return content;
 	}
 	
-	/*게시판*/
+	// 게시판
 	public Content getContentByBoardId(int boardId) {
 		Content content = new Content();
 		
-		/*선택된 게시판*/
+		// 선택된 게시판
 		Board board = boardBO.getBoardById(boardId);
 		content.setBoard(board);
 		
-		/*선택된 게시판 글목록*/
+		// 선택된 게시판 글목록
 		List<Post> postList = postBO.getPostBoardList(boardId);
 		content.setPostBoardList(postList);
 		
 		return content;
 	}
 	
-	/* 로그인 상태: 회원정보, 전체게시판 */
+	// 로그인 상태: 회원정보, 전체게시판
 	public Content getNavLogin(int userId) {
 		Content content = new Content();
 		
-		/* 전체게시판 */
+		// 전체게시판
 		List<Board> boardList = boardBO.getBoardList();
 		content.setBoardList(boardList);
 		
-		/* 포스트, 댓글 카운트 */
+		// 포스트, 댓글 카운트, 방문수
 		int postCount = postBO.getPostCountByUserId(userId);
 		content.setPostCount(postCount);
 		
 		int commentCount = commentBO.getCommentCountByUserId(userId);
 		content.setCommentCount(commentCount);
 		
+		int visitCount = visitBO.getVisitCountByUserId(userId);
+		content.setVisitCount(visitCount);
+		
 		return content;
 	}
 	
-	/* 로그아웃 상태: 전체게시판 */
+	// 로그아웃 상태: 전체게시판
 	public Content getNavLogout() {
 		Content content = new Content();
 		
-		/* 전체게시판 */
+		// 전체게시판
 		List<Board> boardList = boardBO.getBoardList();
 		content.setBoardList(boardList);
 		

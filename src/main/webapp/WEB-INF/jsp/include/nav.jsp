@@ -18,7 +18,7 @@
 			
 			<div class="ml-4 mr-4 d-flex justify-content-between">
 				<span>방문수</span>
-				<span>9888</span>
+				<span>${nav.visitCount}</span>
 			</div>
 			<div class="ml-4 mr-4 d-flex justify-content-between">
 				<span>작성글</span>
@@ -33,6 +33,14 @@
 		<a href="/user/sign_out" class="btn btn-primary w-100">로그아웃</a>
 	</c:if>
 	
+	<!-- 검색창 -->
+	<div class="input-group mt-2">
+		<input type="text" class="form-control" name="search_text">
+		<div class="input-group-prepend">
+			<button type="button" id="searchBtn" class="btn btn-success">검색</button>
+		</div>
+	</div>
+	
 	<!-- 게시판 목록 -->
 	<div id="divBoard">
 		<span><b>게시판</b></span>
@@ -43,3 +51,17 @@
 		</c:forEach>
 	</div>
 </div>
+
+<script>
+	$(document).ready(function() {
+		$('#searchBtn').on('click', function() {
+			let searchText = $('input[name=search_text]').val().trim();
+			if (searchText == "") {
+				alert("검색어를 입력하세요.");
+				return;
+			}
+			
+			location.href = "/main/search_view?searchText=" + searchText;
+		});
+	});
+</script>

@@ -5,6 +5,6 @@
 header {height: 100px;}
 #logo a, #logo a:hover {text-decoration: none; color: black;}
 
-section {height: 600px; display: flex; justify-content: center;}
+section {height: 700px; display: flex; justify-content: center;}
 
 footer {height: 50px; display: flex; justify-content: center;}

@@ -27,11 +27,40 @@
  			`postId` = #{postId}
  	</select>
  	
+ 	<insert id="insertComment" parameterType="map">
+ 		INSERT INTO `comment`
+		(
+			`userId`
+			, `postId`
+			, `nickname`
+			, `content`
+			, `createdAt`
+			, `updatedAt`
+		)
+		VALUES
+		(
+			#{userId}
+			, #{postId}
+			, #{nickname}
+			, #{content}
+			, NOW()
+			, NOW()
+		)
+ 	</insert>
+ 	
  	<delete id="deleteCommentByPostId" parameterType="int">
  		DELETE
  		FROM
  			`comment`
  		WHERE
  			`postId` = #{postId}
+ 	</delete>
+ 	
+ 	<delete id="deleteCommentById" parameterType="int">
+ 		DELETE
+ 		FROM
+ 			`comment`
+ 		WHERE
+ 			`id` = #{id}
  	</delete>
  </mapper>

@@ -22,7 +22,7 @@
 				<td>
 					<fmt:formatDate value="${post.createdAt}" pattern="yyyy.MM.dd" />
 				</td>
-				<td>16</td>
+				<td>${post.visit}</td>
 			</tr>
 			</c:forEach>
 		</tbody>

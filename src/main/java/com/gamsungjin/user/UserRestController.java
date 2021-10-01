@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gamsungjin.user.bo.UserBO;
 import com.gamsungjin.user.model.User;
+import com.gamsungjin.visit.bo.VisitBO;
 
 @RequestMapping("/user")
 @RestController
@@ -21,6 +22,9 @@ public class UserRestController {
 	
 	@Autowired
 	private UserBO userBO;
+	
+	@Autowired
+	private VisitBO visitBO;
 	
 	/**
 	 * 아이디 중복확인
@@ -90,6 +94,8 @@ public class UserRestController {
 			session.setAttribute("userId", user.getId());
 			session.setAttribute("userLoginId", user.getLoginId());
 			session.setAttribute("userNickname", user.getNickname());
+			// 방문수 +1
+			visitBO.addVisit(user.getId());
 			
 			result.put("result", "success");
 		} else {

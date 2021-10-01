@@ -39,10 +39,9 @@ public class MainController {
 			, Model model
 			, HttpServletRequest request) {
 		
-		/* 세션에서 로그인 유저 아이디 가져옴 */
+		// 세션에서 로그인 유저 아이디 가져옴
 		HttpSession session = request.getSession();
 		Integer userId = (Integer) session.getAttribute("userId");
-		
 		
 		if (userId != null) {
 			int postCount = postBO.getPostCountByUserId(userId);
@@ -53,20 +52,20 @@ public class MainController {
 		
 		Content nav = null;
 		if (userId != null) {
-			/* 로그인 상태 */
+			// 로그인 상태
 			nav = contentBO.getNavLogin(userId);
 		} else {
-			/* 로그아웃 상태 */
+			// 로그아웃 상태
 			nav = contentBO.getNavLogout();
 		}
 		
 		Content content = null;
 		if (boardId == null) {
-			/* 메인화면으로 접속 */
+			// 메인화면으로 접속
 			content = contentBO.getContent();
 			model.addAttribute("viewName", "main/main.jsp");
 		} else {
-			/* 게시판으로 접속 */
+			// 게시판으로 접속
 			content = contentBO.getContentByBoardId(boardId);
 			model.addAttribute("viewName", "main/board.jsp");
 		}
@@ -75,6 +74,31 @@ public class MainController {
 		model.addAttribute("content", content);
 		model.addAttribute("title", "gamsungjin");
 		
+		return "template/main_layout";
+	}
+	
+	@RequestMapping("/search_view")
+	public String searchView(
+			@RequestParam("searchText") String searchText
+			, Model model
+			, HttpServletRequest request) {
+		
+		// 세션에서 로그인 유저 아이디 가져옴
+		HttpSession session = request.getSession();
+		Integer userId = (Integer) session.getAttribute("userId");
+		
+		Content nav = null;
+		if (userId != null) {
+			// 로그인 상태
+			nav = contentBO.getNavLogin(userId);
+		} else {
+			// 로그아웃 상태
+			nav = contentBO.getNavLogout();
+		}
+		
+		model.addAttribute("nav", nav);
+		model.addAttribute("title", "검색 확인");
+		 
 		return "template/main_layout";
 	}
 }

@@ -13,6 +13,14 @@ public class Post {
 	private String imagePath;
 	private Date createdAt;
 	private Date updatedAt;
+	private int visit;
+	
+	public int getVisit() {
+		return visit;
+	}
+	public void setVisit(int visit) {
+		this.visit = visit;
+	}
 	private String boardName;
 	
 	public String getBoardName() {

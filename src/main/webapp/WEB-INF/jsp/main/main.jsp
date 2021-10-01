@@ -9,7 +9,7 @@
 		<table class="table">
 			<c:forEach var="post" items="${content.postList}">
 				<tr>
-					<td>${post.subject}</td>
+					<td><a href="/post/detail_view?postId=${post.id}">${post.subject}</a></td>
 				</tr>
 			</c:forEach>
 		</table>
@@ -22,9 +22,9 @@
 			<h2>공지사항</h2>
 			
 			<table class="table">
-				<c:forEach var="postNotice" items="${content.postBoardList}">
+				<c:forEach var="postNotice" items="${content.postNoticeList}">
 					<tr>
-						<td>${postNotice.subject}</td>
+						<td><a href="/post/detail_view?postId=${postNotice.id}">${postNotice.subject}</a></td>
 					</tr>
 				</c:forEach>
 			</table>
@@ -34,13 +34,14 @@
 		<div class="h-50">
 			<h2>사진게시판</h2>
 			
-			<table class="table">
-				<c:forEach var="postImage" items="${content.postBoardList}">
-					<tr>
-						<td>${postImage.subject}</td>
-					</tr>
+			<div class="d-flex flex-wrap">
+				<c:forEach var="postImage" items="${content.postImageList}">
+					<div class="h-50 m-2">
+						<img src="${postImage.imagePath}" alt="사진" width="110px" height="110px"><br>
+						<a href="/post/detail_view?postId=${postImage.id}">${postImage.subject}</a>
+					</div>
 				</c:forEach>
-			</table>
+			</div>
 		</div>
 	</div>
 </div>

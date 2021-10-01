@@ -34,8 +34,7 @@
 		<div class="d-flex justify-content-end">
 			<button type="button" id="postDelBtn" class="btn btn-primary mr-2"
 				data-board-id="${post.boardId}" data-post-id="${post.id}">삭제</button>
-			<button type="button" id="postUpBtn" class="btn btn-secondary"
-				data-post-id="${post.id}">수정</button>
+			<a href="/post/update_view?postId=${post.id}" class="btn btn-secondary">수정</a>
 		</div>
 	</c:if>
 	
@@ -46,6 +45,12 @@
 			<img src="http://simpleicon.com/wp-content/uploads/user1.png" alt="user_icon" width="25px" height="25px">
 			<span class="mr-5">${comment.nickname}</span>
 			<span>${comment.content}</span>
+			
+			<!-- 로그인 유저와 댓글 작성 유저가 같아야 삭제버튼이 보임 -->
+			<c:if test="${userId eq comment.userId}">
+				<img src="https://www.iconninja.com/files/603/22/506/x-icon.png"
+					class="btn commentDelBtn" alt="del_icon" height="25px" data-comment-id="${comment.id}">
+			</c:if>
 		</div>
 	</c:forEach>
 	
@@ -54,7 +59,8 @@
 		<div class="input-group mt-2">
 			<input type="text" class="form-control" name="content" placeholder="댓글을 입력해주세요.">
 			<div class="input-group-append">
-				<button type="button" id="commentUpBtn" class="btn btn-secondary btn-sm">등록</button>
+				<button type="button" id="commentUpBtn" class="btn btn-secondary btn-sm"
+					data-post-id="${post.id}">등록</button>
 			</div>
 		</div>
 	</c:if>
@@ -62,7 +68,7 @@
 
 <script>
 	$(document).ready(function() {	
-		// 글 삭제 버튼
+		// 글삭제
 		$('#postDelBtn').on('click', function() {
 			let boardId = $(this).data('board-id');
 			let postId = $(this).data('post-id');
@@ -79,19 +85,57 @@
 						alert("글삭제 실패. 다시 확인해주세요.");
 					}
 				}, error: function(e) {
-					alert("오류가 발생했습니다. 관리자에게 문의해주세요" + e)
+					alert("오류가 발생했습니다. 관리자에게 문의해주세요" + e);
 				}
 			});
 		});
 		
-		
-		// 
+		// 댓글쓰기
 		$('#commentUpBtn').on('click', function() {
+			let postId = $(this).data('post-id');
+			// 확인
 			let content = $('input[name=content]').val();
 			if (content == "") {
 				alert("댓글을 입력해주세요.");
 				return;
 			}
+			
+			$.ajax({
+				url: '/comment/create'
+				, type: 'post'
+				, data: {'postId':postId, 'content':content}
+				, success: function(data) {
+					if (data.result == "success") {
+						alert("댓글쓰기 성공.");
+						location.reload();
+					} else {
+						alert("댓글쓰기 실패. 다시 확인해주세요.");
+					}
+				}, error: function(e) {
+					alert("오류가 발생했습니다. 관리자에게 문의해주세요" + e);
+				}
+			});
+		});
+		
+		// 댓글삭제
+		$('.commentDelBtn').on('click', function() {
+			let commentId = $(this).data('comment-id');
+			
+			$.ajax({
+				url: '/comment/delete'
+				, type: 'delete'
+				, data: {'commentId':commentId}
+				, success: function(data) {
+					if (data.result == "success") {
+						alert("댓글삭제 성공.");
+						location.reload();
+					} else {
+						alert("댓글삭제 실패.");
+					}
+				}, error: function(e) {
+					alert("오류가 발생했습니다. 관리자에게 문의해주세요" + e);
+				}
+			});
 		});
 	});
 </script>
