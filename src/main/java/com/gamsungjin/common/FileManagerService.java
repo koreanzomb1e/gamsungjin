@@ -17,8 +17,8 @@ public class FileManagerService {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	// 컴퓨터에 저장될 경로
-	public final static String FILE_UPLOAD_PATH = "C:\\Users\\ganjinam\\Desktop\\class\\7_project\\workspace\\gamsungjin\\images/";
-	//public final static String FILE_UPLOAD_PATH = "/home/ec2-user/images/";
+	//public final static String FILE_UPLOAD_PATH = "C:\\Users\\ganjinam\\Desktop\\class\\7_project\\workspace\\gamsungjin\\images/";
+	public final static String FILE_UPLOAD_PATH = "/home/ec2-user/images/";
 	
 	// 파일을 컴퓨터에 저장 -> url path 리턴
 	public String saveFile(int userId, MultipartFile file) throws IOException {
